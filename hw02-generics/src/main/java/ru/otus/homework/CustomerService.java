@@ -7,7 +7,11 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 public class CustomerService {
-    private final TreeMap<Customer, String> map = new TreeMap<>(Comparator.comparingLong(Customer::getScores));
+    private final TreeMap<Customer, String> map;
+
+    public CustomerService() {
+        map = new TreeMap<>(Comparator.comparingLong(Customer::getScores));
+    }
 
     public Map.Entry<Customer, String> getSmallest() {
         return buildResultEntryOrNull(map.firstEntry());
