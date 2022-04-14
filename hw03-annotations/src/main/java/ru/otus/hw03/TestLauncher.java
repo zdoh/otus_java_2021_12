@@ -11,6 +11,8 @@ import ru.otus.hw03.annotations.Test;
 import ru.otus.hw03.utils.ReflectionHelper;
 
 public class TestLauncher {
+    private static final String DELIMITER = "___________________________________";
+
 
     public <T> void runTest(Class<T> tClass) {
         List<Method> methods = Arrays.stream(tClass.getMethods()).toList();
@@ -20,7 +22,7 @@ public class TestLauncher {
 
         List<Boolean> testResult = allTestMethod
                 .stream()
-                .map(test -> runTest(tClass, test, allBeforeMethod, allAfterMethod))
+                .map(test -> runTestLogic(tClass, test, allBeforeMethod, allAfterMethod))
                 .toList();
 
         printResultMessage(allTestMethod.size(), testResult);
@@ -32,7 +34,7 @@ public class TestLauncher {
                 .toList();
     }
 
-    private <T> boolean runTest(
+    private <T> boolean runTestLogic(
             Class<T> tClass,
             Method testMethod,
             List<Method> allBeforeMethod,
@@ -49,7 +51,7 @@ public class TestLauncher {
                     + ", но это не повод перестать работать");
         }
         allAfterMethod.forEach(afterTest -> ReflectionHelper.callMethod(clazz, afterTest.getName()));
-        System.out.println("___________________________________");
+        System.out.println(DELIMITER);
         return result;
     }
 
