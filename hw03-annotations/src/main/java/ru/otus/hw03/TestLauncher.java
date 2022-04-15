@@ -25,7 +25,7 @@ public class TestLauncher {
                 .map(test -> runTestLogic(tClass, test, allBeforeMethod, allAfterMethod))
                 .toList();
 
-        printResultMessage(allTestMethod.size(), testResult);
+        printResultMessage(testResult);
     }
 
     private List<Method> getNeededMethodList(List<Method> methods, Class<? extends Annotation> type) {
@@ -55,9 +55,9 @@ public class TestLauncher {
         return result;
     }
 
-    private void printResultMessage(Integer testCount, List<Boolean> testResult) {
+    private void printResultMessage(List<Boolean> testResult) {
         System.out.println("==============================>");
-        System.out.println("Всего было запущено тестов: " + testCount);
+        System.out.println("Всего было запущено тестов: " + testResult.size());
         System.out.println("Успешно выполнено: " +
                 testResult.stream().filter(res -> Objects.equals(res, true)).count());
         System.out.println("Выполнено с ошибкой: " +
