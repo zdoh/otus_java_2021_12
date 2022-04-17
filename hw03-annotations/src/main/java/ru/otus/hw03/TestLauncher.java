@@ -42,8 +42,8 @@ public class TestLauncher {
     ) {
         boolean result = false;
         T clazz = ReflectionHelper.instantiate(tClass);
-        allBeforeMethod.forEach(beforeTest -> ReflectionHelper.callMethod(clazz, beforeTest.getName()));
         try {
+            allBeforeMethod.forEach(beforeTest -> ReflectionHelper.callMethod(clazz, beforeTest.getName()));
             ReflectionHelper.callMethod(clazz, testMethod.getName());
             result = true;
         } catch (RuntimeException e) {
