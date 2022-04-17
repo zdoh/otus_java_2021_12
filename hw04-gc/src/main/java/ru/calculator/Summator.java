@@ -24,12 +24,23 @@ public class Summator {
         prevPrevValue = prevValue;
         prevValue = data.getValue();
 
-        for (var idx = 0; idx < 3; idx++) {
-//            someValue += (sumLastThreeValues * sumLastThreeValues / (data.getValue() + 1) - sum);
-//            someValue = Math.abs(someValue) + listValues.size();
+        // вариант 1, где мы убрали не нужное сохранения в someValue
+        /*for (var idx = 0; idx < 3; idx++) {
+            // первоначальный вариант
+            // someValue += (sumLastThreeValues * sumLastThreeValues / (data.getValue() + 1) - sum);
+            // someValue = Math.abs(someValue) + listValues.size();
             someValue = Math.abs(someValue + (sumLastThreeValues * sumLastThreeValues / (data.getValue() + 1) - sum))
                     + listValues.size();
-        }
+        }*/
+
+        // вариант 2, где мы присваиваем значение someValue без цикла и предварительного сохранения в someValue
+        someValue = Math.abs(
+                Math.abs(
+                        Math.abs(
+                                someValue + (sumLastThreeValues * sumLastThreeValues / (data.getValue() + 1) - sum)
+                        ) + listValues.size() + (sumLastThreeValues * sumLastThreeValues / (data.getValue() + 1) - sum)
+                ) + listValues.size() + (sumLastThreeValues * sumLastThreeValues / (data.getValue() + 1) - sum)
+        ) + listValues.size();
     }
 
     public Integer getSum() {
