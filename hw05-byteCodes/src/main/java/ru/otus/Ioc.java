@@ -49,18 +49,18 @@ public class Ioc {
 
     private static boolean compareTwoMethod(Method first, Method second) {
         // собираем список типов параметров в первом методе
-        var firstParam = Arrays
+        var firstMethodParamTypeNames = Arrays
                 .stream(first.getParameters())
                 .map(a -> a.getParameterizedType().getTypeName())
                 .toList();
 
         // собираем список типов параметров во втором методе
-        var secondParam = Arrays
+        var secondMethodParamTypeNames = Arrays
                 .stream(second.getParameters())
                 .map(a -> a.getParameterizedType().getTypeName())
                 .toList();
 
         return Objects.equals(first.getName(), second.getName()) &&
-                firstParam.equals(secondParam);
+                firstMethodParamTypeNames.equals(secondMethodParamTypeNames);
     }
 }
