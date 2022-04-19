@@ -36,7 +36,7 @@ public class Ioc {
         @Override
         public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
             // находим нужный метод в классе, который имплементирует интерфейс
-            Method implMethod = Arrays.stream(implementation.getMethods())
+            var implMethod = Arrays.stream(implementation.getMethods())
                     .filter(iMethod -> compareTwoMethod(iMethod, method))
                     .findFirst().orElse(null);
 
@@ -49,13 +49,13 @@ public class Ioc {
 
     private static boolean compareTwoMethod(Method first, Method second) {
         // собираем список типов параметров в первом методе
-        List<String> firstParam = Arrays
+        var firstParam = Arrays
                 .stream(first.getParameters())
                 .map(a -> a.getParameterizedType().getTypeName())
                 .toList();
 
         // собираем список типов параметров во втором методе
-        List<String> secondParam = Arrays
+        var secondParam = Arrays
                 .stream(second.getParameters())
                 .map(a -> a.getParameterizedType().getTypeName())
                 .toList();
