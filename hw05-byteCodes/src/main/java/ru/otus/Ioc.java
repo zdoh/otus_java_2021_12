@@ -26,17 +26,17 @@ public class Ioc {
 
         private final T myClass;
 
-        private final Class<?> implementation;
+        private final List<Method> implMethods;
 
         MyInvocationHandler(T myClass) {
             this.myClass = myClass;
-            this.implementation = myClass.getClass();
+            this.implMethods = Arrays.stream(myClass.getClass().getMethods()).toList();
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
-            // находим нужный метод в классе, который имплементирует интерфейс
-            var implMethod = Arrays.stream(implementation.getMethods())
+            // находим нужный метод в списке методов из имплементирующего интерфейс класса
+            var implMethod = implMethods.stream()
                     .filter(iMethod -> compareTwoMethod(iMethod, method))
                     .findFirst().orElse(null);
 
