@@ -4,8 +4,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 import ru.otus.annotation.Log;
 
 public class Ioc {
@@ -26,41 +24,20 @@ public class Ioc {
 
         private final T myClass;
 
-        private final List<Method> implMethods;
+        private final Class<?> impClass;
 
         MyInvocationHandler(T myClass) {
             this.myClass = myClass;
-            this.implMethods = Arrays.stream(myClass.getClass().getMethods()).toList();
+            this.impClass = myClass.getClass();
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
-            // находим нужный метод в списке методов из имплементирующего интерфейс класса
-            var implMethod = implMethods.stream()
-                    .filter(iMethod -> compareTwoMethod(iMethod, method))
-                    .findFirst().orElse(null);
-
-            if (Objects.nonNull(implMethod) && implMethod.isAnnotationPresent(Log.class)) {
+            if (impClass.getDeclaredMethod(method.getName(), method.getParameterTypes())
+                    .isAnnotationPresent(Log.class)) {
                 System.out.println("executed method: calculation, param: " + Arrays.toString(args));
             }
             return method.invoke(myClass, args);
         }
-    }
-
-    private static boolean compareTwoMethod(Method first, Method second) {
-        // собираем список типов параметров в первом методе
-        var firstMethodParamTypeNames = Arrays
-                .stream(first.getParameters())
-                .map(a -> a.getParameterizedType().getTypeName())
-                .toList();
-
-        // собираем список типов параметров во втором методе
-        var secondMethodParamTypeNames = Arrays
-                .stream(second.getParameters())
-                .map(a -> a.getParameterizedType().getTypeName())
-                .toList();
-
-        return Objects.equals(first.getName(), second.getName()) &&
-                firstMethodParamTypeNames.equals(secondMethodParamTypeNames);
     }
 }
