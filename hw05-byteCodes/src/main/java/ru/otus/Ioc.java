@@ -39,10 +39,14 @@ public class Ioc {
                             .map(Arrays::asList)
                             .flatMap(List::stream)
                             .collect(Collectors.toMap(method -> method,
-                                    method -> Arrays.stream(myClass.getClass().getMethods()).toList().stream()
-                                            .filter(implMethod -> compareTwoMethod(method, implMethod))
-                                            .anyMatch(implMethod -> implMethod.isAnnotationPresent(Log.class))
-                            ));
+                                    method -> {
+                                        try {
+                                            return myClass.getClass().getDeclaredMethod(method.getName(),
+                                                    method.getParameterTypes()).isAnnotationPresent(Log.class);
+                                        } catch (NoSuchMethodException e) {
+                                            return false;
+                                        }
+                                    }));
         }
 
         @Override
@@ -53,22 +57,5 @@ public class Ioc {
 
             return method.invoke(myClass, args);
         }
-    }
-
-    private static boolean compareTwoMethod(Method first, Method second) {
-        // собираем список типов параметров в первом методе
-        var firstMethodParamTypeNames = Arrays
-                .stream(first.getParameters())
-                .map(a -> a.getParameterizedType().getTypeName())
-                .toList();
-
-        // собираем список типов параметров во втором методе
-        var secondMethodParamTypeNames = Arrays
-                .stream(second.getParameters())
-                .map(a -> a.getParameterizedType().getTypeName())
-                .toList();
-
-        return Objects.equals(first.getName(), second.getName()) &&
-                firstMethodParamTypeNames.equals(secondMethodParamTypeNames);
     }
 }
