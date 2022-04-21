@@ -28,12 +28,12 @@ public class Ioc {
 
         private final T myClass;
 
-        private final Map<Method, Boolean> implClassMethodContainLogAnnotations;
+        private final Map<Method, Boolean> implClassMethodContainLogAnnotationMap;
 
         MyInvocationHandler(T myClass) {
             this.myClass = myClass;
 
-            this.implClassMethodContainLogAnnotations =
+            this.implClassMethodContainLogAnnotationMap =
                     Arrays.stream(myClass.getClass().getInterfaces())
                             .map(Class::getMethods)
                             .map(Arrays::asList)
@@ -47,7 +47,7 @@ public class Ioc {
 
         @Override
         public Object invoke(Object proxy, Method method, Object... args) throws Throwable {
-            if (Objects.equals(implClassMethodContainLogAnnotations.get(method), true)) {
+            if (Objects.equals(implClassMethodContainLogAnnotationMap.get(method), true)) {
                 System.out.println("executed method: calculation, param: " + Arrays.toString(args));
             }
 
