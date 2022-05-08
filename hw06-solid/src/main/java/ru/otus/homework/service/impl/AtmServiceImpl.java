@@ -24,11 +24,13 @@ public class AtmServiceImpl implements AtmService {
 
     @Override
     public void moneyAdd(Map<Banknot, Integer> banknotsWithCount) {
-        banknotsWithCount.forEach(this::moneyAdd);
+        for (Entry<Banknot, Integer> banknotIntegerEntry : banknotsWithCount.entrySet()) {
+            moneyAdd(banknotIntegerEntry.getKey(), banknotIntegerEntry.getValue());
+        }
     }
 
     @Override
-    public Integer totalAmountOfMoney() {
+    public int totalAmountOfMoney() {
         return banknotsCountMap.entrySet().stream()
                 .map(entry -> entry.getKey().getDenomination() * entry.getValue())
                 .reduce(0, Integer::sum);
@@ -36,7 +38,7 @@ public class AtmServiceImpl implements AtmService {
 
     @Override
     public Integer banknotCount(Banknot banknot) {
-        return banknotsCountMap.getOrDefault(banknot, 0);
+        return banknotsCountMap.getOrDefault(banknot, null);
     }
 
     @Override
@@ -52,14 +54,12 @@ public class AtmServiceImpl implements AtmService {
         Map<Banknot, Integer> tmpCell = new HashMap<>();
 
         for (Entry<Banknot, Integer> banknotIntegerEntry : banknotsCountMap.entrySet()) {
-            if (amountOfMoney == 0) {
-                continue;
+            if (amountOfMoney != 0) {
+                int tmpCnt = Math.min(banknotIntegerEntry.getValue(),
+                        amountOfMoney / banknotIntegerEntry.getKey().getDenomination());
+                amountOfMoney -= tmpCnt * banknotIntegerEntry.getKey().getDenomination();
+                tmpCell.put(banknotIntegerEntry.getKey(), tmpCnt);
             }
-
-            int tmpCnt = Math.min(banknotIntegerEntry.getValue(),
-                    amountOfMoney / banknotIntegerEntry.getKey().getDenomination());
-            amountOfMoney -= tmpCnt * banknotIntegerEntry.getKey().getDenomination();
-            tmpCell.put(banknotIntegerEntry.getKey(), tmpCnt);
         }
 
         if (amountOfMoney == 0) {

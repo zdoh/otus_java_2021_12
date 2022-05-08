@@ -28,7 +28,7 @@ public interface AtmService {
      *
      * @return сумма денег в АТМ
      */
-    Integer totalAmountOfMoney();
+    int totalAmountOfMoney();
 
     /**
      * Получить кол-во купюр находящихся в АТП переданного номинала

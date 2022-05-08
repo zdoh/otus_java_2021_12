@@ -22,16 +22,16 @@ class AtmServiceTest {
         atmService.moneyAdd(Banknot.ONE, 5);
         assertEquals(5, atmService.totalAmountOfMoney());
         assertEquals(5, atmService.banknotCount(Banknot.ONE));
-        assertEquals(0, atmService.banknotCount(Banknot.TWO));
-        assertEquals(0, atmService.banknotCount(Banknot.FIVE));
-        assertEquals(0, atmService.banknotCount(Banknot.TEN));
+        assertNull(atmService.banknotCount(Banknot.TWO));
+        assertNull(atmService.banknotCount(Banknot.FIVE));
+        assertNull(atmService.banknotCount(Banknot.TEN));
 
         atmService.moneyAdd(Banknot.TWO, 5);
         assertEquals(15, atmService.totalAmountOfMoney());
         assertEquals(5, atmService.banknotCount(Banknot.ONE));
         assertEquals(5, atmService.banknotCount(Banknot.TWO));
-        assertEquals(0, atmService.banknotCount(Banknot.FIVE));
-        assertEquals(0, atmService.banknotCount(Banknot.TEN));
+        assertNull(atmService.banknotCount(Banknot.FIVE));
+        assertNull(atmService.banknotCount(Banknot.TEN));
 
         atmService.moneyAdd(Map.of(Banknot.FIVE, 2, Banknot.TEN, 3, Banknot.ONE, 7));
         assertEquals(62, atmService.totalAmountOfMoney());
